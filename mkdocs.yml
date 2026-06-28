@@ -1,6 +1,7 @@
 site_name: Claude Gateway
 site_url: https://Mukesh-M-Lohar.github.io/claude-gateway/
 site_description: High-performance repository-aware proxy cache daemon for Claude Code
+docs_dir: docs
 
 theme:
   name: material
