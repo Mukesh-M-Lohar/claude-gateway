@@ -10,11 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://Mukesh-M-Lohar.github.io/claude-gateway/dashboard/">
+        <link rel="canonical" href="https://Mukesh-M-Lohar.github.io/claude-gateway/architecture/">
       
       
-        <link rel="prev" href="../scaling/">
+        <link rel="prev" href="../setup/">
       
+      
+        <link rel="next" href="../caching/">
       
       
         
@@ -25,7 +27,7 @@
     
     
       
-        <title>Console Dashboard - Claude Gateway</title>
+        <title>Architecture - Claude Gateway</title>
       
     
     
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#console-dashboard-metrics" class="md-skip">
+        <a href="#architecture-details" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Console Dashboard
+              Architecture
             
           </span>
         </div>
@@ -245,9 +247,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../architecture/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -321,11 +325,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../dashboard/" class="md-tabs__link">
         
   
   
@@ -429,10 +431,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../architecture/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -448,6 +477,87 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#request-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Request Lifecycle
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architectural-subsystems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Architectural Subsystems
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architectural Subsystems">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-context-resolution-gatewaygitcontextpy-repositorypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Context Resolution (gateway/git/context.py &amp; repository.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-cache-invalidation-control-gatewaycacheinvalidationpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Cache Invalidation Control (gateway/cache/invalidation.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-exporter-metrics-gatewaymetricsprometheuspy-storagesqlitepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Exporter &amp; Metrics (gateway/metrics/prometheus.py &amp; storage/sqlite.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -537,37 +647,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Console Dashboard
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../dashboard/" class="md-nav__link">
         
   
   
@@ -583,99 +666,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-web-console-dashboard" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Web Console Dashboard
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="1. Web Console Dashboard">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-console-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Console Features
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-prometheus-exporter" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Prometheus Exporter
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2. Prometheus Exporter">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#exposed-metrics" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Exposed Metrics
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Exposed Metrics">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#label-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Label Values
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -707,70 +697,58 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-web-console-dashboard" class="md-nav__link">
+  <a href="#request-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Web Console Dashboard
+        Request Lifecycle
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="1. Web Console Dashboard">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-console-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key Console Features
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-prometheus-exporter" class="md-nav__link">
+  <a href="#architectural-subsystems" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Prometheus Exporter
+        Architectural Subsystems
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Prometheus Exporter">
+    <nav class="md-nav" aria-label="Architectural Subsystems">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#exposed-metrics" class="md-nav__link">
+  <a href="#1-context-resolution-gatewaygitcontextpy-repositorypy" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Exposed Metrics
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Exposed Metrics">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#label-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Label Values
+        1. Context Resolution (gateway/git/context.py &amp; repository.py)
       
     </span>
   </a>
   
 </li>
         
-      </ul>
-    </nav>
+          <li class="md-nav__item">
+  <a href="#2-cache-invalidation-control-gatewaycacheinvalidationpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Cache Invalidation Control (gateway/cache/invalidation.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-exporter-metrics-gatewaymetricsprometheuspy-storagesqlitepy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Exporter &amp; Metrics (gateway/metrics/prometheus.py &amp; storage/sqlite.py)
+      
+    </span>
+  </a>
   
 </li>
         
@@ -796,59 +774,65 @@
 
 
 
-<h1 id="console-dashboard-metrics">Console Dashboard &amp; Metrics</h1>
-<p>Claude Gateway features robust observability tools to track your API costs and savings.</p>
+<h1 id="architecture-details">Architecture Details</h1>
+<p>Claude Gateway acts as a high-performance HTTP proxy between the <strong>Claude Code</strong> CLI client and the <strong>Anthropic Messages API</strong>. </p>
 <hr />
-<h2 id="1-web-console-dashboard">1. Web Console Dashboard</h2>
-<p>Access the HTML dashboard at <code>http://127.0.0.1:8000/dashboard</code> in your browser.</p>
-<h3 id="key-console-features">Key Console Features</h3>
+<h2 id="request-lifecycle">Request Lifecycle</h2>
+<p>The diagram below details how a request is processed from client entry to streaming completion:</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Developer as Claude Code (CLI)
+    participant Gateway as Claude Gateway (FastAPI)
+    participant DB as SQLite / Redis
+    participant Vector as SQLite / Qdrant
+    participant LLM as Anthropic API
+
+    Developer-&gt;&gt;Gateway: POST /v1/messages
+    Note over Gateway: 1. Detect CWD/PID via psutil&lt;br/&gt;2. Extract &amp; Normalize prompt&lt;br/&gt;3. Resolve referenced file hashes
+
+    Gateway-&gt;&gt;DB: Check Exact Cache (SHA-256 Key)
+    alt Exact Cache Hit &amp; File Hashes Valid
+        DB--&gt;&gt;Gateway: Return cached response text
+        Gateway--&gt;&gt;Developer: Replay cached text stream (SSE)
+    else Exact Cache Miss / Stale
+        Gateway-&gt;&gt;Vector: Generate embedding &amp; Search (Threshold 0.95)
+        alt Semantic Cache Hit &amp; File Hashes Valid
+            Vector--&gt;&gt;Gateway: Return semantic response text
+            Gateway--&gt;&gt;Developer: Replay cached text stream (SSE)
+        else Semantic Cache Miss
+            Gateway-&gt;&gt;LLM: Forward POST /v1/messages
+            loop Real-time Stream
+                LLM--&gt;&gt;Gateway: SSE Token Chunks
+                Gateway--&gt;&gt;Developer: Forward SSE tokens instantly
+                Note over Gateway: Accumulate tokens in buffer
+            end
+            Note over Gateway: Stream Completed
+            Gateway-&gt;&gt;DB: Store Exact Cache &amp; file hashes
+            Gateway-&gt;&gt;Vector: Store Semantic Cache vector &amp; payload
+            Gateway-&gt;&gt;DB: Log miss cost/token usage metrics
+        end
+    end
+</code></pre>
+<hr />
+<h2 id="architectural-subsystems">Architectural Subsystems</h2>
+<h3 id="1-context-resolution-gatewaygitcontextpy-repositorypy">1. Context Resolution (<code>gateway/git/context.py</code> &amp; <code>repository.py</code>)</h3>
 <ul>
-<li><strong>Savings Cards</strong>: Monitor total USD saved, avoided tokens, overall hit rate, and active caches in real-time.</li>
-<li><strong>Repository List</strong>: Inspect tracked repositories, branch names, token avoidance, and exact/semantic sizes per repository namespace.</li>
-<li><strong>Recent Activities</strong>: Review the latest exact and semantic cache logs, including files referenced and total token weights.</li>
-<li><strong>Invalidation Workspace</strong>: Manually invalidate caches for a specific repository or flush references to a single changed file.</li>
-<li><strong>Savings Charts</strong>: View a visual bar chart of cost savings accumulated per repository.</li>
+<li><strong>Local PID Tracking</strong>: Inspects system connections to link the client's TCP socket port to the process ID (PID) on the host machine.</li>
+<li><strong>Directory Path Lookup</strong>: Inspects the PID's execution environment to extract the current working directory (CWD), walking up the tree to locate the <code>.git</code> folder.</li>
+<li><strong>Repository Identifiers</strong>: Pulls the active branch, commit hash, and working tree modification status directly from git files (very fast) or fallback CLI commands.</li>
 </ul>
-<hr />
-<h2 id="2-prometheus-exporter">2. Prometheus Exporter</h2>
-<p>A Prometheus endpoint is exposed at <code>/metrics</code> to monitor the proxy within standard monitoring stacks (e.g. Grafana).</p>
-<h3 id="exposed-metrics">Exposed Metrics</h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Metric Name</th>
-<th style="text-align: left;">Type</th>
-<th style="text-align: left;">Labels</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>gateway_requests_total</code></td>
-<td style="text-align: left;">Counter</td>
-<td style="text-align: left;"><code>repo</code>, <code>model</code>, <code>event_type</code>, <code>cache_type</code></td>
-<td style="text-align: left;">Total requests proxied through the gateway.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>gateway_tokens_total</code></td>
-<td style="text-align: left;">Counter</td>
-<td style="text-align: left;"><code>repo</code>, <code>model</code>, <code>token_type</code>, <code>status</code></td>
-<td style="text-align: left;">Total input/output tokens processed.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>gateway_cost_usd_total</code></td>
-<td style="text-align: left;">Counter</td>
-<td style="text-align: left;"><code>repo</code>, <code>model</code>, <code>status</code></td>
-<td style="text-align: left;">Total cost in USD saved or spent.</td>
-</tr>
-</tbody>
-</table>
-<h4 id="label-values">Label Values</h4>
+<h3 id="2-cache-invalidation-control-gatewaycacheinvalidationpy">2. Cache Invalidation Control (<code>gateway/cache/invalidation.py</code>)</h3>
 <ul>
-<li><strong><code>event_type</code></strong>: <code>hit</code> | <code>miss</code></li>
-<li><strong><code>cache_type</code></strong>: <code>exact</code> | <code>semantic</code> | <code>none</code></li>
-<li><strong><code>token_type</code></strong>: <code>input</code> | <code>output</code></li>
-<li><strong><code>status</code></strong>: <code>saved</code> (cache hit) | <code>spent</code> (cache miss)</li>
+<li><strong>Regex Normalization</strong>: Strips polite phrases and compacts spacing so minor syntax variations hit the cache.</li>
+<li><strong>Workspace Verification</strong>: Scans prompt text for filenames, checks if they exist in the repository, and hashes them using SHA-256. </li>
+<li><strong>Lazy Check</strong>: Validates that files are in their cached state on read before returning a hit. Stale caches are immediately evicted.</li>
+<li><strong>Background Watcher</strong>: Polls repository directories. If a branch changes or <code>git status</code> reveals a file modification, any cached prompt linked to that file is immediately deleted.</li>
+</ul>
+<h3 id="3-exporter-metrics-gatewaymetricsprometheuspy-storagesqlitepy">3. Exporter &amp; Metrics (<code>gateway/metrics/prometheus.py</code> &amp; <code>storage/sqlite.py</code>)</h3>
+<ul>
+<li>Log entries are written to a lightweight SQLite database recording tokens avoiding/spent and calculated cost values.</li>
+<li>Exposes standard <code>/metrics</code> endpoints for scrape-based Grafana dashboard configurations.</li>
+<li>Serves an embedded responsive single-page analytics dashboard for developers.</li>
 </ul>
 
 

@@ -10,11 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://Mukesh-M-Lohar.github.io/claude-gateway/dashboard/">
+        <link rel="canonical" href="https://Mukesh-M-Lohar.github.io/claude-gateway/scaling/">
       
       
-        <link rel="prev" href="../scaling/">
+        <link rel="prev" href="../docker/">
       
+      
+        <link rel="next" href="../dashboard/">
       
       
         
@@ -25,7 +27,7 @@
     
     
       
-        <title>Console Dashboard - Claude Gateway</title>
+        <title>Enterprise Scaling - Claude Gateway</title>
       
     
     
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#console-dashboard-metrics" class="md-skip">
+        <a href="#enterprise-scaling-100-developers" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Console Dashboard
+              Enterprise Scaling
             
           </span>
         </div>
@@ -302,9 +304,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../scaling/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -321,11 +325,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../dashboard/" class="md-tabs__link">
         
   
   
@@ -510,33 +512,6 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../scaling/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Enterprise Scaling
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -556,7 +531,7 @@
   <span class="md-ellipsis">
     
   
-    Console Dashboard
+    Enterprise Scaling
   
 
     
@@ -574,7 +549,7 @@
   <span class="md-ellipsis">
     
   
-    Console Dashboard
+    Enterprise Scaling
   
 
     
@@ -600,22 +575,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-web-console-dashboard" class="md-nav__link">
+  <a href="#1-centralized-shared-cache-topology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Web Console Dashboard
+        1. Centralized Shared Cache Topology
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Web Console Dashboard">
+    <nav class="md-nav" aria-label="1. Centralized Shared Cache Topology">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#key-console-features" class="md-nav__link">
+  <a href="#shared-caching-benefits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Console Features
+        Shared Caching Benefits
       
     </span>
   </a>
@@ -628,34 +603,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-prometheus-exporter" class="md-nav__link">
+  <a href="#2-api-context-handling-at-scale" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Prometheus Exporter
+        2. API Context Handling at Scale
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Prometheus Exporter">
+    <nav class="md-nav" aria-label="2. API Context Handling at Scale">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#exposed-metrics" class="md-nav__link">
+  <a href="#workaround-custom-header-injection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Exposed Metrics
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Exposed Metrics">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#label-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Label Values
+        Workaround: Custom Header Injection
       
     </span>
   </a>
@@ -664,6 +627,68 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-webhook-based-invalidation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Webhook-Based Invalidation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Webhook-Based Invalidation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#centralized-webhook-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Centralized Webhook Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-high-availability-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. High Availability &amp; Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. High Availability &amp; Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stateless-proxy-pods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stateless proxy pods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rate-limiting-cost-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate limiting &amp; cost controls
+      
+    </span>
+  </a>
   
 </li>
         
@@ -676,6 +701,33 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Console Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -707,22 +759,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-web-console-dashboard" class="md-nav__link">
+  <a href="#1-centralized-shared-cache-topology" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Web Console Dashboard
+        1. Centralized Shared Cache Topology
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="1. Web Console Dashboard">
+    <nav class="md-nav" aria-label="1. Centralized Shared Cache Topology">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#key-console-features" class="md-nav__link">
+  <a href="#shared-caching-benefits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Console Features
+        Shared Caching Benefits
       
     </span>
   </a>
@@ -735,34 +787,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-prometheus-exporter" class="md-nav__link">
+  <a href="#2-api-context-handling-at-scale" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Prometheus Exporter
+        2. API Context Handling at Scale
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="2. Prometheus Exporter">
+    <nav class="md-nav" aria-label="2. API Context Handling at Scale">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#exposed-metrics" class="md-nav__link">
+  <a href="#workaround-custom-header-injection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Exposed Metrics
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Exposed Metrics">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#label-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Label Values
+        Workaround: Custom Header Injection
       
     </span>
   </a>
@@ -771,6 +811,68 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-webhook-based-invalidation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Webhook-Based Invalidation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Webhook-Based Invalidation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#centralized-webhook-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Centralized Webhook Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-high-availability-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. High Availability &amp; Authentication
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. High Availability &amp; Authentication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stateless-proxy-pods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        stateless proxy pods
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rate-limiting-cost-controls" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rate limiting &amp; cost controls
+      
+    </span>
+  </a>
   
 </li>
         
@@ -796,59 +898,70 @@
 
 
 
-<h1 id="console-dashboard-metrics">Console Dashboard &amp; Metrics</h1>
-<p>Claude Gateway features robust observability tools to track your API costs and savings.</p>
+<h1 id="enterprise-scaling-100-developers">Enterprise Scaling (100+ Developers)</h1>
+<p>While the default setup runs as a local standalone daemon, Claude Gateway is designed to scale into a centralized enterprise proxy service serving large development teams (100+ developers). </p>
+<p>This guide details the architecture and requirements for a scaled deployment.</p>
 <hr />
-<h2 id="1-web-console-dashboard">1. Web Console Dashboard</h2>
-<p>Access the HTML dashboard at <code>http://127.0.0.1:8000/dashboard</code> in your browser.</p>
-<h3 id="key-console-features">Key Console Features</h3>
+<h2 id="1-centralized-shared-cache-topology">1. Centralized Shared Cache Topology</h2>
+<p>Instead of developers running independent caches, the proxy can be deployed centrally (e.g. in Kubernetes or an internal cloud subnet) with a shared caching layer:</p>
+<pre><code>  Dev 1 (CLI) ──┐
+  Dev 2 (CLI) ──┼─► Central Load Balancer (AWS ALB / Nginx)
+  Dev 3 (CLI) ──┘           │
+                            ▼
+                  [ Horizontal Gateway Pods ]
+                            │
+         ┌──────────────────┴──────────────────┐
+         ▼                                     ▼
+   Shared Redis Cluster                 Shared Qdrant Cluster
+   (Shared Exact Caches)                (Shared Semantic Index)
+</code></pre>
+<h3 id="shared-caching-benefits">Shared Caching Benefits</h3>
 <ul>
-<li><strong>Savings Cards</strong>: Monitor total USD saved, avoided tokens, overall hit rate, and active caches in real-time.</li>
-<li><strong>Repository List</strong>: Inspect tracked repositories, branch names, token avoidance, and exact/semantic sizes per repository namespace.</li>
-<li><strong>Recent Activities</strong>: Review the latest exact and semantic cache logs, including files referenced and total token weights.</li>
-<li><strong>Invalidation Workspace</strong>: Manually invalidate caches for a specific repository or flush references to a single changed file.</li>
-<li><strong>Savings Charts</strong>: View a visual bar chart of cost savings accumulated per repository.</li>
+<li><strong>Exponential Savings</strong>: If Developer A asks a question about a common corporate framework file or shared utility library, Developer B gets an <strong>instant cache hit</strong>.</li>
+<li><strong>Unified Knowledge Cache</strong>: Standard coding explanations, workspace setup steps, and architectural summaries are cached team-wide, preventing redundant API costs.</li>
 </ul>
 <hr />
-<h2 id="2-prometheus-exporter">2. Prometheus Exporter</h2>
-<p>A Prometheus endpoint is exposed at <code>/metrics</code> to monitor the proxy within standard monitoring stacks (e.g. Grafana).</p>
-<h3 id="exposed-metrics">Exposed Metrics</h3>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Metric Name</th>
-<th style="text-align: left;">Type</th>
-<th style="text-align: left;">Labels</th>
-<th style="text-align: left;">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><code>gateway_requests_total</code></td>
-<td style="text-align: left;">Counter</td>
-<td style="text-align: left;"><code>repo</code>, <code>model</code>, <code>event_type</code>, <code>cache_type</code></td>
-<td style="text-align: left;">Total requests proxied through the gateway.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>gateway_tokens_total</code></td>
-<td style="text-align: left;">Counter</td>
-<td style="text-align: left;"><code>repo</code>, <code>model</code>, <code>token_type</code>, <code>status</code></td>
-<td style="text-align: left;">Total input/output tokens processed.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><code>gateway_cost_usd_total</code></td>
-<td style="text-align: left;">Counter</td>
-<td style="text-align: left;"><code>repo</code>, <code>model</code>, <code>status</code></td>
-<td style="text-align: left;">Total cost in USD saved or spent.</td>
-</tr>
-</tbody>
-</table>
-<h4 id="label-values">Label Values</h4>
+<h2 id="2-api-context-handling-at-scale">2. API Context Handling at Scale</h2>
+<p>Centralized gateways cannot use <code>psutil</code> local socket lookup to detect a developer's local CWD on their host machine. </p>
+<h3 id="workaround-custom-header-injection">Workaround: Custom Header Injection</h3>
+<p>To make the centralized proxy repository-aware, distribute a shell wrapper alias or Git hook that automatically captures Git context and passes it as HTTP request headers:</p>
+<pre><code class="language-bash"># Developer Shell Alias / Function
+function claude-central() {
+  # Get local repository details
+  local repo_name=$(basename $(git rev-parse --show-toplevel 2&gt;/dev/null) 2&gt;/dev/null || echo &quot;global&quot;)
+  local branch_name=$(git branch --show-current 2&gt;/dev/null || echo &quot;main&quot;)
+  local commit_hash=$(git rev-parse HEAD 2&gt;/dev/null || echo &quot;unknown&quot;)
+  local working_dir=$(pwd)
+
+  # Configure CLI to point to central proxy and inject git variables
+  export ANTHROPIC_BASE_URL=&quot;https://claude-gateway.corp.internal&quot;
+  export ANTHROPIC_CUSTOM_HEADERS=&quot;X-Git-Repo: $repo_name\nX-Git-Branch: $branch_name\nX-Git-Commit: $commit_hash\nX-Working-Dir: $working_dir&quot;
+
+  claude &quot;$@&quot;
+}
+</code></pre>
+<p>The gateway extracts these <code>X-Git-*</code> headers to isolate cache namespaces per repository and evaluate file hashes.</p>
+<hr />
+<h2 id="3-webhook-based-invalidation">3. Webhook-Based Invalidation</h2>
+<p>Running active repository watchers (polling directories via git commands) is not feasible when files reside on 100+ different developer machines.</p>
+<h3 id="centralized-webhook-integration">Centralized Webhook Integration</h3>
+<p>To maintain cache freshness at scale:
+1.  <strong>Repository Push Events</strong>: Configure your central Git platform (GitHub Enterprise, GitLab, or Bitbucket) to trigger webhooks to the Claude Gateway on every push/merge to code repositories.
+2.  <strong>Parser</strong>: The gateway's webhook endpoint parses the push event to extract:
+    - Repository name
+    - Branch name
+    - List of added, modified, or deleted files
+3.  <strong>Active Flush</strong>: The gateway runs a background worker to evict any cached entries linked to the modified files in the shared Redis and Qdrant clusters.</p>
+<hr />
+<h2 id="4-high-availability-authentication">4. High Availability &amp; Authentication</h2>
+<p>For team-scale stability, security, and logging:</p>
+<h3 id="stateless-proxy-pods">stateless proxy pods</h3>
+<p>The FastAPI gateway pods are completely stateless, delegating all operations to Redis and Qdrant. They can be scaled horizontally behind an ingress controller based on CPU/traffic spikes.</p>
+<h3 id="rate-limiting-cost-controls">rate limiting &amp; cost controls</h3>
 <ul>
-<li><strong><code>event_type</code></strong>: <code>hit</code> | <code>miss</code></li>
-<li><strong><code>cache_type</code></strong>: <code>exact</code> | <code>semantic</code> | <code>none</code></li>
-<li><strong><code>token_type</code></strong>: <code>input</code> | <code>output</code></li>
-<li><strong><code>status</code></strong>: <code>saved</code> (cache hit) | <code>spent</code> (cache miss)</li>
+<li><strong>Auth Proxy Integration</strong>: Authenticate developer CLI requests using Single Sign-On (SSO) or API keys.</li>
+<li><strong>Cost Allocation</strong>: Log metrics to a central database (e.g. Postgres) tracking savings and spent costs per developer, allowing managers to allocate API budgets.</li>
+<li><strong>Usage Caps</strong>: Implement rate limiters in FastAPI middleware to prevent abuse or infinite loop API requests.</li>
 </ul>
 
 
