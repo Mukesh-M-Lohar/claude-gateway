@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  gateway:
+    build: .
+    container_name: claude-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - EXACT_CACHE_BACKEND=redis
+      - SEMANTIC_CACHE_BACKEND=qdrant
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - qdrant
+    volumes:
+      # Mount host repository paths if you wish to monitor them inside Docker.
+      # Note: For client CWD detection via socket PID to work, the container
+      # must share the host's PID and Network namespace (only fully supported on Linux).
+      # See README.md for Docker configuration details.
+      - /:/host-root:ro
+
+  redis:
+    image: redis:7.0-alpine
+    container_name: claude-gateway-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: claude-gateway-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+volumes:
+  redis_data:
+  qdrant_data:

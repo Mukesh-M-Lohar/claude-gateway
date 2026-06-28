@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Gateway Console</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-base: #0b0c10;
+            --bg-surface: rgba(31, 38, 52, 0.4);
+            --bg-surface-solid: #1f2634;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(99, 102, 241, 0.25);
+            
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            
+            --primary: #6366f1;       /* Indigo */
+            --primary-glow: rgba(99, 102, 241, 0.15);
+            --success: #10b981;       /* Emerald */
+            --success-glow: rgba(16, 185, 129, 0.15);
+            --warning: #f59e0b;       /* Amber */
+            --danger: #ef4444;        /* Rose */
+            
+            --font-main: 'Outfit', sans-serif;
+            --font-code: 'Space Grotesk', monospace;
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2.5rem;
+            line-height: 1.5;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .logo-section h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-section h1 span.pulse {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 12px var(--success);
+            animation: pulse-anim 2s infinite;
+        }
+
+        @keyframes pulse-anim {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 16px var(--success); }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .logo-section p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        button {
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.5rem;
+            transition: var(--transition-smooth);
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--primary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--text-secondary);
+        }
+
+        /* Glassmorphic Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-glow);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-glow-indigo::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary);
+        }
+
+        .card-glow-green::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--success);
+        }
+
+        .card-glow-amber::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--warning);
+        }
+
+        .card-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+            font-family: var(--font-code);
+            color: white;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .card-subtext {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Table Styling */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border-glass);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: var(--font-code);
+        }
+
+        .badge-primary {
+            background-color: var(--primary-glow);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .badge-success {
+            background-color: var(--success-glow);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .chart-box {
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Forms / Controls */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        select, input {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: white;
+            font-family: var(--font-main);
+            font-size: 0.9375rem;
+            transition: var(--transition-smooth);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 8px var(--primary-glow);
+        }
+
+        .help-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Recent Cache List */
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .recent-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.75rem;
+        }
+
+        .recent-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .recent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.375rem;
+        }
+
+        .recent-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: white;
+            font-family: var(--font-code);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 250px;
+        }
+
+        .recent-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .recent-prompt {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .recent-files {
+            margin-top: 0.375rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .file-tag {
+            font-size: 0.7rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            color: var(--text-secondary);
+            font-family: var(--font-code);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-section">
+            <h1><span class="pulse"></span>Claude Gateway Console</h1>
+            <p>Smart, Repository-Aware LLM Proxy Daemon</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-outline" onclick="refreshStats()">Refresh Data</button>
+            <button class="btn-primary" onclick="showInvalidateModal()">Invalidate Cache</button>
+        </div>
+    </header>
+
+    <!-- Metrics Cards -->
+    <div class="metrics-grid">
+        <div class="card card-glow-indigo">
+            <div class="card-label">USD Cost Saved</div>
+            <div class="card-value" id="stat-cost-saved">$0.0000</div>
+            <div class="card-subtext" id="stat-cost-spent">Cost spent: $0.0000</div>
+        </div>
+        <div class="card card-glow-green">
+            <div class="card-label">Avoided Tokens</div>
+            <div class="card-value" id="stat-tokens-avoided">0</div>
+            <div class="card-subtext" id="stat-tokens-spent">Tokens spent: 0</div>
+        </div>
+        <div class="card card-glow-amber">
+            <div class="card-label">Cache Hit Rate</div>
+            <div class="card-value" id="stat-hit-rate">0.0%</div>
+            <div class="card-subtext" id="stat-hits-misses">Hits: 0 / Misses: 0</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Active Cache Entries</div>
+            <div class="card-value" id="stat-active-caches">0</div>
+            <div class="card-subtext">Across registered repositories</div>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="main-layout">
+        
+        <!-- Left Column: Repositories & Charts -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            
+            <!-- Repository List -->
+            <div class="card">
+                <div class="section-title">
+                    <span>Monitored Repositories</span>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Repository Namespace</th>
+                                <th>Exact Cache</th>
+                                <th>Semantic Cache</th>
+                                <th>Avoided Tokens</th>
+                                <th>USD Saved</th>
+                                <th>Hit Rate</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="repo-table-body">
+                            <!-- Populated dynamically -->
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-muted);">Loading repository statistics...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Invalidation Workspace -->
+            <div class="card" id="invalidate-card" style="display: none;">
+                <div class="section-title">
+                    <span>Cache Invalidation Panel</span>
+                    <button class="btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="hideInvalidateModal()">Close</button>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <div class="form-group">
+                            <label for="inv-repo">Select Repository</label>
+                            <select id="inv-repo">
+                                <!-- Populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="inv-type">Invalidation Method</label>
+                            <select id="inv-type" onchange="toggleInvFields()">
+                                <option value="repo">Entire Repository Cache</option>
+                                <option value="file">Specific File (Relative Path)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group" id="inv-file-group" style="display: none;">
+                            <label for="inv-file">Relative File Path</label>
+                            <input type="text" id="inv-file" placeholder="e.g. src/utils.js">
+                            <div class="help-text">Any cached entry referencing this file will be invalidated.</div>
+                        </div>
+                        <div style="display: flex; align-items: flex-end; height: calc(100% - 1.25rem); padding-bottom: 1.25rem;">
+                            <button class="btn-primary" onclick="submitInvalidate()" style="background-color: var(--danger); border-color: var(--danger); width: 100%;">Flush Selected Cache</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Savings Chart -->
+            <div class="card">
+                <div class="section-title">Savings Analysis</div>
+                <div class="chart-box">
+                    <canvas id="savingsChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Recent Activity Logs -->
+        <div style="display: flex; flex-direction: column; gap: 2rem;">
+            
+            <div class="card">
+                <div class="section-title">Recent Exact Cache</div>
+                <div class="recent-list" id="recent-exact-list">
+                    <!-- Populated dynamically -->
+                    <div style="color: var(--text-muted); font-size: 0.875rem;">No exact cache hits yet.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">Recent Semantic Cache</div>
+                <div class="recent-list" id="recent-semantic-list">
+                    <!-- Populated dynamically -->
+                    <div style="color: var(--text-muted); font-size: 0.875rem;">No semantic cache hits yet.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let savingsChart = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            refreshStats();
+            // Auto refresh stats every 10 seconds
+            setInterval(refreshStats, 10000);
+        });
+
+        async function refreshStats() {
+            try {
+                const response = await fetch("/api/stats");
+                const data = await response.json();
+                
+                // 1. Fill overview cards
+                document.getElementById("stat-cost-saved").textContent = `$${data.summary.cost_saved.toFixed(4)}`;
+                document.getElementById("stat-cost-spent").textContent = `Cost spent: $${data.summary.cost_spent.toFixed(4)}`;
+                document.getElementById("stat-tokens-avoided").textContent = data.summary.tokens_avoided.toLocaleString();
+                document.getElementById("stat-tokens-spent").textContent = `Tokens spent: ${data.summary.tokens_spent.toLocaleString()}`;
+                document.getElementById("stat-hit-rate").textContent = `${data.summary.hit_rate.toFixed(1)}%`;
+                document.getElementById("stat-hits-misses").textContent = `Hits: ${data.summary.hits} / Misses: ${data.summary.misses}`;
+                
+                // Count entries
+                let totalCaches = 0;
+                data.repos.forEach(r => {
+                    totalCaches += r.exact_cache_size + r.semantic_cache_size;
+                });
+                document.getElementById("stat-active-caches").textContent = totalCaches;
+
+                // 2. Build Monitored Repos table
+                const tbody = document.getElementById("repo-table-body");
+                tbody.innerHTML = "";
+                
+                const selectRepo = document.getElementById("inv-repo");
+                selectRepo.innerHTML = "";
+
+                if (data.repos.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No active repositories registered. Launch Claude Code in a git repository.</td></tr>`;
+                } else {
+                    data.repos.forEach(r => {
+                        // Table row
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td style="font-weight:600; font-family:var(--font-code); color:white;">${r.repo}</td>
+                            <td>${r.exact_cache_size}</td>
+                            <td>${r.semantic_cache_size}</td>
+                            <td>${r.tokens_avoided.toLocaleString()}</td>
+                            <td style="font-family:var(--font-code); color:var(--success); font-weight:500;">$${r.cost_saved.toFixed(4)}</td>
+                            <td><span class="badge ${r.hit_rate > 50 ? 'badge-success' : 'badge-primary'}">${r.hit_rate}%</span></td>
+                            <td>
+                                <button class="btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-color: rgba(239,68,68,0.3); color: #ef4444;" onclick="flushRepo('${r.repo}')">Flush</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+
+                        // Dropdown option
+                        const opt = document.createElement("option");
+                        opt.value = r.repo;
+                        opt.textContent = r.repo;
+                        selectRepo.appendChild(opt);
+                    });
+                }
+
+                // 3. Fill Recent lists
+                populateRecentList("recent-exact-list", data.recent.exact, "exact");
+                populateRecentList("recent-semantic-list", data.recent.semantic, "semantic");
+
+                // 4. Update chart
+                updateChart(data.repos);
+
+            } catch (error) {
+                console.error("Error fetching gateway stats:", error);
+            }
+        }
+
+        function populateRecentList(elementId, items, type) {
+            const list = document.getElementById(elementId);
+            list.innerHTML = "";
+            
+            if (!items || items.length === 0) {
+                list.innerHTML = `<div style="color: var(--text-muted); font-size: 0.875rem;">No active entries.</div>`;
+                return;
+            }
+            
+            items.forEach(item => {
+                const div = document.createElement("div");
+                div.className = "recent-item";
+                
+                // Date formatting
+                const date = new Date(item.created_at);
+                const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+                
+                let title = type === "exact" ? `Key: ${item.key.substring(0, 8)}...` : item.prompt;
+                
+                // Files markup
+                let filesMarkup = "";
+                if (item.files && item.files.length > 0) {
+                    filesMarkup = `<div class="recent-files">` + 
+                        item.files.map(f => `<span class="file-tag">${f}</span>`).join('') + 
+                        `</div>`;
+                }
+
+                div.innerHTML = `
+                    <div class="recent-header">
+                        <span class="recent-title">${title}</span>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">${timeStr}</span>
+                    </div>
+                    <div class="recent-meta">
+                        <span class="badge badge-primary">${item.repo}</span>
+                        <span style="font-family:var(--font-code);">${item.total_tokens} tokens</span>
+                    </div>
+                    ${filesMarkup}
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function showInvalidateModal() {
+            document.getElementById("invalidate-card").style.display = "block";
+        }
+
+        function hideInvalidateModal() {
+            document.getElementById("invalidate-card").style.display = "none";
+        }
+
+        function toggleInvFields() {
+            const type = document.getElementById("inv-type").value;
+            const fileGroup = document.getElementById("inv-file-group");
+            fileGroup.style.display = type === "file" ? "block" : "none";
+        }
+
+        async function submitInvalidate() {
+            const repo = document.getElementById("inv-repo").value;
+            const type = document.getElementById("inv-type").value;
+            const file = document.getElementById("inv-file").value.strip ? document.getElementById("inv-file").value.trim() : document.getElementById("inv-file").value;
+            
+            if (!repo) {
+                alert("Please select a repository first.");
+                return;
+            }
+            
+            let payload = { repo: repo };
+            if (type === "file") {
+                if (!file) {
+                    alert("Please enter a relative file path.");
+                    return;
+                }
+                payload.file = file;
+            }
+            
+            try {
+                const resp = await fetch("/api/invalidate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const res = await resp.json();
+                alert(res.detail || "Invalidation triggered successfully!");
+                hideInvalidateModal();
+                refreshStats();
+            } catch (e) {
+                alert("Failed to submit invalidation: " + e);
+            }
+        }
+
+        async function flushRepo(repoName) {
+            if (!confirm(`Are you sure you want to flush all cache entries for repository: ${repoName}?`)) {
+                return;
+            }
+            try {
+                const resp = await fetch("/api/invalidate", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ repo: repoName })
+                });
+                refreshStats();
+            } catch (e) {
+                alert("Failed to flush: " + e);
+            }
+        }
+
+        function updateChart(repos) {
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            
+            const labels = repos.map(r => r.repo);
+            const data = repos.map(r => r.cost_saved);
+            
+            if (savingsChart) {
+                savingsChart.data.labels = labels;
+                savingsChart.data.datasets[0].data = data;
+                savingsChart.update();
+                return;
+            }
+
+            savingsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'USD Cost Saved',
+                        data: data,
+                        backgroundColor: 'rgba(99, 102, 241, 0.4)',
+                        borderColor: '#6366f1',
+                        borderWidth: 1.5,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `$${context.raw.toFixed(4)} saved`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: {
+                                color: '#9ca3af',
+                                callback: function(value) { return '$' + value; }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
