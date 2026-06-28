@@ -1,0 +1,31 @@
+site_name: Claude Gateway
+site_url: https://Mukesh-M-Lohar.github.io/claude-gateway/
+site_description: High-performance repository-aware proxy cache daemon for Claude Code
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - content.code.copy
+    - content.code.annotate
+
+nav:
+  - Home: index.md
+  - Setup & Config: setup.md
+  - Caching Architecture: caching.md
+  - Docker Deployment: docker.md
+  - Console Dashboard: dashboard.md
