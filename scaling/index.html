@@ -899,12 +899,12 @@
 
 
 <h1 id="enterprise-scaling-100-developers">Enterprise Scaling (100+ Developers)</h1>
-<p>While the default setup runs as a local standalone daemon, Claude Gateway is designed to scale into a centralized enterprise proxy service serving large development teams (100+ developers). </p>
+<p>While the default setup runs as a local standalone daemon, Claude Gateway is designed to scale into a centralized enterprise proxy service serving large development teams (100+ developers).</p>
 <p>This guide details the architecture and requirements for a scaled deployment.</p>
 <hr />
 <h2 id="1-centralized-shared-cache-topology">1. Centralized Shared Cache Topology</h2>
 <p>Instead of developers running independent caches, the proxy can be deployed centrally (e.g. in Kubernetes or an internal cloud subnet) with a shared caching layer:</p>
-<pre><code>  Dev 1 (CLI) ──┐
+<div class="highlight"><pre><span></span><code>  Dev 1 (CLI) ──┐
   Dev 2 (CLI) ──┼─► Central Load Balancer (AWS ALB / Nginx)
   Dev 3 (CLI) ──┘           │
                             ▼
@@ -914,7 +914,7 @@
          ▼                                     ▼
    Shared Redis Cluster                 Shared Qdrant Cluster
    (Shared Exact Caches)                (Shared Semantic Index)
-</code></pre>
+</code></pre></div>
 <h3 id="shared-caching-benefits">Shared Caching Benefits</h3>
 <ul>
 <li><strong>Exponential Savings</strong>: If Developer A asks a question about a common corporate framework file or shared utility library, Developer B gets an <strong>instant cache hit</strong>.</li>
@@ -922,24 +922,24 @@
 </ul>
 <hr />
 <h2 id="2-api-context-handling-at-scale">2. API Context Handling at Scale</h2>
-<p>Centralized gateways cannot use <code>psutil</code> local socket lookup to detect a developer's local CWD on their host machine. </p>
+<p>Centralized gateways cannot use <code>psutil</code> local socket lookup to detect a developer's local CWD on their host machine.</p>
 <h3 id="workaround-custom-header-injection">Workaround: Custom Header Injection</h3>
 <p>To make the centralized proxy repository-aware, distribute a shell wrapper alias or Git hook that automatically captures Git context and passes it as HTTP request headers:</p>
-<pre><code class="language-bash"># Developer Shell Alias / Function
-function claude-central() {
-  # Get local repository details
-  local repo_name=$(basename $(git rev-parse --show-toplevel 2&gt;/dev/null) 2&gt;/dev/null || echo &quot;global&quot;)
-  local branch_name=$(git branch --show-current 2&gt;/dev/null || echo &quot;main&quot;)
-  local commit_hash=$(git rev-parse HEAD 2&gt;/dev/null || echo &quot;unknown&quot;)
-  local working_dir=$(pwd)
+<div class="highlight"><pre><span></span><code><span class="c1"># Developer Shell Alias / Function</span>
+<span class="k">function</span><span class="w"> </span>claude-central<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="c1"># Get local repository details</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">repo_name</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="k">$(</span>git<span class="w"> </span>rev-parse<span class="w"> </span>--show-toplevel<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="k">)</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;global&quot;</span><span class="k">)</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">branch_name</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>branch<span class="w"> </span>--show-current<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="k">)</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">commit_hash</span><span class="o">=</span><span class="k">$(</span>git<span class="w"> </span>rev-parse<span class="w"> </span>HEAD<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;unknown&quot;</span><span class="k">)</span>
+<span class="w">  </span><span class="nb">local</span><span class="w"> </span><span class="nv">working_dir</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
 
-  # Configure CLI to point to central proxy and inject git variables
-  export ANTHROPIC_BASE_URL=&quot;https://claude-gateway.corp.internal&quot;
-  export ANTHROPIC_CUSTOM_HEADERS=&quot;X-Git-Repo: $repo_name\nX-Git-Branch: $branch_name\nX-Git-Commit: $commit_hash\nX-Working-Dir: $working_dir&quot;
+<span class="w">  </span><span class="c1"># Configure CLI to point to central proxy and inject git variables</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">ANTHROPIC_BASE_URL</span><span class="o">=</span><span class="s2">&quot;https://claude-gateway.corp.internal&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">ANTHROPIC_CUSTOM_HEADERS</span><span class="o">=</span><span class="s2">&quot;X-Git-Repo: </span><span class="nv">$repo_name</span><span class="s2">\nX-Git-Branch: </span><span class="nv">$branch_name</span><span class="s2">\nX-Git-Commit: </span><span class="nv">$commit_hash</span><span class="s2">\nX-Working-Dir: </span><span class="nv">$working_dir</span><span class="s2">&quot;</span>
 
-  claude &quot;$@&quot;
-}
-</code></pre>
+<span class="w">  </span>claude<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
 <p>The gateway extracts these <code>X-Git-*</code> headers to isolate cache namespaces per repository and evaluate file hashes.</p>
 <hr />
 <h2 id="3-webhook-based-invalidation">3. Webhook-Based Invalidation</h2>

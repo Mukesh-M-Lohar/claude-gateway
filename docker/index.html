@@ -756,10 +756,10 @@
 <p>Run Claude Gateway alongside Redis and Qdrant in a containerized environment.</p>
 <hr />
 <h2 id="1-quick-start">1. Quick Start</h2>
-<p>Run the compose command from the project root:</p>
-<pre><code class="language-bash">docker compose up -d --build
-</code></pre>
-<p>This boots three containers:
+<p>Run the compose command from the project root:
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+</code></pre></div>
+This boots three containers:
 - <strong><code>claude-gateway</code></strong> (FastAPI) on port <code>8000</code>
 - <strong><code>claude-gateway-redis</code></strong> on port <code>6379</code>
 - <strong><code>claude-gateway-qdrant</code></strong> on port <code>6333</code></p>
@@ -767,27 +767,27 @@
 <h2 id="2-process-namespace-isolation-cwd-workaround">2. Process Namespace Isolation (CWD Workaround)</h2>
 <p>Docker containers run in isolated PID and Network namespaces. By default, <code>psutil</code> inside the container <strong>cannot</strong> inspect host ports or PIDs to find which local directory Claude Code is running in.</p>
 <h3 id="linux-hosts">Linux Hosts</h3>
-<p>On Linux, you can resolve this by sharing the host network and process space. Add the following parameters to the <code>gateway</code> service in <code>docker-compose.yml</code>:</p>
-<pre><code class="language-yaml">network_mode: &quot;host&quot;
-pid: &quot;host&quot;
-</code></pre>
+<p>On Linux, you can resolve this by sharing the host network and process space. Add the following parameters to the <code>gateway</code> service in <code>docker-compose.yml</code>:
+<div class="highlight"><pre><span></span><code><span class="nt">network_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;host&quot;</span>
+<span class="nt">pid</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;host&quot;</span>
+</code></pre></div></p>
 <h3 id="windows-macos-cross-platform">Windows &amp; macOS (Cross-Platform)</h3>
-<p>Since shared PID namespaces are not supported on Windows/macOS virtual hypervisors, you must pass the working directory explicitly in HTTP headers using Claude Code's custom header configurations. </p>
+<p>Since shared PID namespaces are not supported on Windows/macOS virtual hypervisors, you must pass the working directory explicitly in HTTP headers using Claude Code's custom header configurations.</p>
 <p>Add the following shortcut functions to your shell config file (<code>~/.bashrc</code>, <code>~/.zshrc</code>, or PowerShell profile):</p>
 <p>=== "PowerShell Profile"
-    <code>powershell
-    function claude-proxy {
-        $env:ANTHROPIC_BASE_URL="http://localhost:8000"
-        $env:ANTHROPIC_CUSTOM_HEADERS="X-Working-Dir: $(Get-Location)"
-        claude $args
-    }</code></p>
+    <div class="highlight"><pre><span></span><code><span class="k">function</span> <span class="n">claude-proxy</span> <span class="p">{</span>
+    <span class="nv">$env:ANTHROPIC_BASE_URL</span><span class="p">=</span><span class="s2">&quot;http://localhost:8000&quot;</span>
+    <span class="nv">$env:ANTHROPIC_CUSTOM_HEADERS</span><span class="p">=</span><span class="s2">&quot;X-Working-Dir: </span><span class="p">$(</span><span class="nb">Get-Location</span><span class="p">)</span><span class="s2">&quot;</span>
+    <span class="n">claude</span> <span class="nv">$args</span>
+<span class="p">}</span>
+</code></pre></div></p>
 <p>=== "Bash / Zsh Config"
-    <code>bash
-    function claude-proxy() {
-      export ANTHROPIC_BASE_URL="http://localhost:8000"
-      export ANTHROPIC_CUSTOM_HEADERS="X-Working-Dir: $(pwd)"
-      claude "$@"
-    }</code></p>
+    <div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>claude-proxy<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">ANTHROPIC_BASE_URL</span><span class="o">=</span><span class="s2">&quot;http://localhost:8000&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">ANTHROPIC_CUSTOM_HEADERS</span><span class="o">=</span><span class="s2">&quot;X-Working-Dir: </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&quot;</span>
+<span class="w">  </span>claude<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div></p>
 <p>Run <code>claude-proxy</code> instead of <code>claude</code>. This ensures your active path is always transmitted to the containerized daemon.</p>
 
 

@@ -494,6 +494,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#request-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -697,6 +708,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#system-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Architecture
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#request-lifecycle" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -775,11 +797,60 @@
 
 
 <h1 id="architecture-details">Architecture Details</h1>
-<p>Claude Gateway acts as a high-performance HTTP proxy between the <strong>Claude Code</strong> CLI client and the <strong>Anthropic Messages API</strong>. </p>
+<p>Claude Gateway acts as a high-performance HTTP proxy between the <strong>Claude Code</strong> CLI client and the <strong>Anthropic Messages API</strong>.</p>
+<hr />
+<h2 id="system-architecture">System Architecture</h2>
+<p>The following block diagram illustrates the subsystems, databases, background workers, and external connections within the Claude Gateway:</p>
+<pre class="mermaid"><code>graph TD
+    classDef main fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff;
+    classDef db fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff;
+    classDef external fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#fff;
+    classDef worker fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:#fff;
+
+    Client["Claude Code CLI (Client)"]:::main
+    Gateway["Claude Gateway (FastAPI Proxy)"]:::main
+
+    subgraph LocalCache ["Cache Layers"]
+        Exact["Exact Match Cache&lt;br/&gt;(Redis / SQLite)"]:::db
+        Semantic["Semantic Vector Cache&lt;br/&gt;(Qdrant / SQLite)"]:::db
+    end
+
+    subgraph GitContext ["Workspace &amp; Git Context"]
+        GitWatcher["Git Repository Watcher&lt;br/&gt;(Polls branch / file changes)"]:::worker
+        Invalidation["Cache Invalidation Engine&lt;br/&gt;(SHA-256 File Hash Check)"]:::worker
+    end
+
+    subgraph Storage ["Persistent Storage"]
+        MetricsDB["SQLite Metrics DB&lt;br/&gt;(Stats, Costs, History)"]:::db
+    end
+
+    Anthropic["Anthropic Messages API"]:::external
+    LocalLLM["Local Embedding Provider&lt;br/&gt;(Ollama / LM Studio / Gemini / OpenAI)"]:::external
+
+    %% Data Flows
+    Client --&gt;|1. POST /v1/messages| Gateway
+    Gateway --&gt;|2. Check PID CWD / Git info| GitContext
+    Gateway --&gt;|3. Compute normalized hash &amp; check| Exact
+
+    Exact --&gt;|Hit &amp; Valid| Client
+    Exact --&gt;|Miss / Stale| Semantic
+
+    Semantic --&gt;|4. Get embeddings| LocalLLM
+    Semantic --&gt;|Hit &amp; Valid| Client
+
+    Semantic --&gt;|Miss| Anthropic
+    Anthropic --&gt;|5. Stream response chunks| Gateway
+    Gateway --&gt;|6. Stream response &amp; Cache| Client
+
+    %% Cache Updates &amp; Invalidation
+    Gateway -.-&gt;|Update cache entries &amp; file hashes| LocalCache
+    Gateway -.-&gt;|Write token &amp; cost metrics| MetricsDB
+    GitWatcher --&gt;|Invalidates stale keys| LocalCache
+    Invalidation --&gt;|Verify file hashes on-read| LocalCache</code></pre>
 <hr />
 <h2 id="request-lifecycle">Request Lifecycle</h2>
 <p>The diagram below details how a request is processed from client entry to streaming completion:</p>
-<pre><code class="language-mermaid">sequenceDiagram
+<pre class="mermaid"><code>sequenceDiagram
     autonumber
     actor Developer as Claude Code (CLI)
     participant Gateway as Claude Gateway (FastAPI)
@@ -811,8 +882,7 @@
             Gateway-&gt;&gt;Vector: Store Semantic Cache vector &amp; payload
             Gateway-&gt;&gt;DB: Log miss cost/token usage metrics
         end
-    end
-</code></pre>
+    end</code></pre>
 <hr />
 <h2 id="architectural-subsystems">Architectural Subsystems</h2>
 <h3 id="1-context-resolution-gatewaygitcontextpy-repositorypy">1. Context Resolution (<code>gateway/git/context.py</code> &amp; <code>repository.py</code>)</h3>
@@ -824,7 +894,7 @@
 <h3 id="2-cache-invalidation-control-gatewaycacheinvalidationpy">2. Cache Invalidation Control (<code>gateway/cache/invalidation.py</code>)</h3>
 <ul>
 <li><strong>Regex Normalization</strong>: Strips polite phrases and compacts spacing so minor syntax variations hit the cache.</li>
-<li><strong>Workspace Verification</strong>: Scans prompt text for filenames, checks if they exist in the repository, and hashes them using SHA-256. </li>
+<li><strong>Workspace Verification</strong>: Scans prompt text for filenames, checks if they exist in the repository, and hashes them using SHA-256.</li>
 <li><strong>Lazy Check</strong>: Validates that files are in their cached state on read before returning a hit. Stale caches are immediately evicted.</li>
 <li><strong>Background Watcher</strong>: Polls repository directories. If a branch changes or <code>git status</code> reveals a file modification, any cached prompt linked to that file is immediately deleted.</li>
 </ul>

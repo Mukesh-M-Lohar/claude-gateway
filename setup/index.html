@@ -538,6 +538,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4-using-lower-cost-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Using Lower-Cost Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-using-local-llms-for-embeddings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Using Local LLMs for Embeddings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Using Local LLMs for Embeddings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-configuring-ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Configuring Ollama
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-configuring-lm-studio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Configuring LM Studio
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -779,6 +829,56 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4-using-lower-cost-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Using Lower-Cost Models
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-using-local-llms-for-embeddings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Using Local LLMs for Embeddings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Using Local LLMs for Embeddings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-configuring-ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Configuring Ollama
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-configuring-lm-studio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example: Configuring LM Studio
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -806,25 +906,25 @@
 <li>Git (in your PATH)</li>
 </ul>
 <h3 id="install-dependencies">Install Dependencies</h3>
-<p>Run the installation command in your terminal:</p>
-<pre><code class="language-bash">py -m pip install -r requirements.txt
-</code></pre>
+<p>Run the installation command in your terminal:
+<div class="highlight"><pre><span></span><code>py<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div></p>
 <h3 id="start-the-gateway">Start the Gateway</h3>
-<pre><code class="language-bash">py main.py
-</code></pre>
-<p>The server starts locally on <code>http://127.0.0.1:8000</code>. 
+<p><div class="highlight"><pre><span></span><code>py<span class="w"> </span>main.py
+</code></pre></div>
+The server starts locally on <code>http://127.0.0.1:8000</code>.
 Access the console dashboard at <code>http://127.0.0.1:8000/dashboard</code>.</p>
 <hr />
 <h2 id="2-shell-configuration">2. Shell Configuration</h2>
 <p>To route Claude Code requests through the gateway, set the <code>ANTHROPIC_BASE_URL</code> environment variable in your active terminal:</p>
 <p>=== "Windows (PowerShell)"
-    <code>powershell
-    $env:ANTHROPIC_BASE_URL="http://127.0.0.1:8000"
-    claude</code></p>
+    <div class="highlight"><pre><span></span><code><span class="nv">$env:ANTHROPIC_BASE_URL</span><span class="p">=</span><span class="s2">&quot;http://127.0.0.1:8000&quot;</span>
+<span class="n">claude</span>
+</code></pre></div></p>
 <p>=== "macOS / Linux / WSL"
-    <code>bash
-    export ANTHROPIC_BASE_URL="http://127.0.0.1:8000"
-    claude</code></p>
+    <div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">ANTHROPIC_BASE_URL</span><span class="o">=</span><span class="s2">&quot;http://127.0.0.1:8000&quot;</span>
+claude
+</code></pre></div></p>
 <hr />
 <h2 id="3-environment-variables-env">3. Environment Variables (<code>.env</code>)</h2>
 <p>Configure the application behavior by creating a <code>.env</code> file at the root:</p>
@@ -855,12 +955,12 @@ Access the console dashboard at <code>http://127.0.0.1:8000/dashboard</code>.</p
 <tr>
 <td style="text-align: left;"><code>OPENAI_API_KEY</code></td>
 <td style="text-align: left;"><code>""</code></td>
-<td style="text-align: left;">Required if <code>EMBEDDING_PROVIDER</code> is set to <code>openai</code>.</td>
+<td style="text-align: left;">Optional. Required if <code>EMBEDDING_PROVIDER=openai</code> (unless using local endpoints).</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>GEMINI_API_KEY</code></td>
 <td style="text-align: left;"><code>""</code></td>
-<td style="text-align: left;">Required if <code>EMBEDDING_PROVIDER</code> is set to <code>gemini</code>.</td>
+<td style="text-align: left;">Optional. Required if <code>EMBEDDING_PROVIDER=gemini</code>.</td>
 </tr>
 <tr>
 <td style="text-align: left;"><code>EXACT_CACHE_BACKEND</code></td>
@@ -878,6 +978,26 @@ Access the console dashboard at <code>http://127.0.0.1:8000/dashboard</code>.</p
 <td style="text-align: left;">Select <code>"openai"</code>, <code>"gemini"</code>, or <code>"mock"</code>.</td>
 </tr>
 <tr>
+<td style="text-align: left;"><code>OPENAI_BASE_URL</code></td>
+<td style="text-align: left;"><code>https://api.openai.com/v1</code></td>
+<td style="text-align: left;">Custom endpoint for OpenAI-compatible local services (e.g. Ollama, LM Studio).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>OPENAI_EMBEDDING_MODEL</code></td>
+<td style="text-align: left;"><code>text-embedding-3-small</code></td>
+<td style="text-align: left;">The model name to request from your OpenAI-compatible provider.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>EMBEDDING_DIMENSION</code></td>
+<td style="text-align: left;"><code>1536</code></td>
+<td style="text-align: left;">Dimensions of the embedding model (e.g., 768 for <code>nomic-embed-text</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>GEMINI_EMBEDDING_MODEL</code></td>
+<td style="text-align: left;"><code>text-embedding-004</code></td>
+<td style="text-align: left;">Model name to use when <code>EMBEDDING_PROVIDER</code> is set to <code>gemini</code>.</td>
+</tr>
+<tr>
 <td style="text-align: left;"><code>SIMILARITY_THRESHOLD</code></td>
 <td style="text-align: left;"><code>0.95</code></td>
 <td style="text-align: left;">Similarity threshold for semantic cache hits (0.0 - 1.0).</td>
@@ -889,6 +1009,37 @@ Access the console dashboard at <code>http://127.0.0.1:8000/dashboard</code>.</p
 </tr>
 </tbody>
 </table>
+<hr />
+<h2 id="4-using-lower-cost-models">4. Using Lower-Cost Models</h2>
+<p>Claude Code defaults to using <code>claude-3-5-sonnet</code>. You can run Claude Code with a smaller, faster, and more cost-effective model like <code>claude-3-5-haiku</code> by passing the <code>--model</code> flag:</p>
+<div class="highlight"><pre><span></span><code>claude<span class="w"> </span>--model<span class="w"> </span>claude-3-5-haiku
+</code></pre></div>
+<p>Claude Gateway automatically detects the model specified by the client request, calculates the corresponding token pricing, and tracks it in your metrics dashboard.</p>
+<hr />
+<h2 id="5-using-local-llms-for-embeddings">5. Using Local LLMs for Embeddings</h2>
+<p>By default, the gateway uses a local bag-of-words <code>"mock"</code> provider to generate embeddings. If you want high-quality semantic caching without paying API fees to OpenAI or Google, you can route your embeddings to a local model running on your machine using <strong>Ollama</strong> or <strong>LM Studio</strong>.</p>
+<h3 id="example-configuring-ollama">Example: Configuring Ollama</h3>
+<ol>
+<li>Run Ollama locally and pull an embedding model:
+   <div class="highlight"><pre><span></span><code>ollama<span class="w"> </span>pull<span class="w"> </span>nomic-embed-text
+</code></pre></div></li>
+<li>Configure your <code>.env</code> file to use Ollama's OpenAI-compatible endpoint:
+   <div class="highlight"><pre><span></span><code><span class="na">EMBEDDING_PROVIDER</span><span class="o">=</span><span class="s">openai</span>
+<span class="na">OPENAI_BASE_URL</span><span class="o">=</span><span class="s">http://localhost:11434/v1</span>
+<span class="na">OPENAI_EMBEDDING_MODEL</span><span class="o">=</span><span class="s">nomic-embed-text</span>
+<span class="na">EMBEDDING_DIMENSION</span><span class="o">=</span><span class="s">768</span>
+</code></pre></div></li>
+</ol>
+<h3 id="example-configuring-lm-studio">Example: Configuring LM Studio</h3>
+<ol>
+<li>Open LM Studio, download/load an embedding model, and start the local server on port <code>1234</code>.</li>
+<li>Configure your <code>.env</code>:
+   <div class="highlight"><pre><span></span><code><span class="na">EMBEDDING_PROVIDER</span><span class="o">=</span><span class="s">openai</span>
+<span class="na">OPENAI_BASE_URL</span><span class="o">=</span><span class="s">http://localhost:1234/v1</span>
+<span class="na">OPENAI_EMBEDDING_MODEL</span><span class="o">=</span><span class="s">your-loaded-embedding-model</span>
+<span class="na">EMBEDDING_DIMENSION</span><span class="o">=</span><span class="s">your-model-dimension</span>
+</code></pre></div></li>
+</ol>
 
 
 
