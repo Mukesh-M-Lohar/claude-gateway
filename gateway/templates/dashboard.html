@@ -17,21 +17,21 @@
             --bg-surface-solid: #1f2634;
             --border-glass: rgba(255, 255, 255, 0.08);
             --border-glow: rgba(99, 102, 241, 0.25);
-            
+
             --text-primary: #f3f4f6;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
-            
+
             --primary: #6366f1;       /* Indigo */
             --primary-glow: rgba(99, 102, 241, 0.15);
             --success: #10b981;       /* Emerald */
             --success-glow: rgba(16, 185, 129, 0.15);
             --warning: #f59e0b;       /* Amber */
             --danger: #ef4444;        /* Rose */
-            
+
             --font-main: 'Outfit', sans-serif;
             --font-code: 'Space Grotesk', monospace;
-            
+
             --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -48,7 +48,7 @@
             min-height: 100vh;
             padding: 2.5rem;
             line-height: 1.5;
-            background-image: 
+            background-image:
                 radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
                 radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
             background-attachment: fixed;
@@ -74,7 +74,7 @@
             align-items: center;
             gap: 0.75rem;
         }
-        
+
         .logo-section h1 span.pulse {
             width: 8px;
             height: 8px;
@@ -432,10 +432,10 @@
 
     <!-- Main Workspace -->
     <div class="main-layout">
-        
+
         <!-- Left Column: Repositories & Charts -->
         <div style="display: flex; flex-direction: column; gap: 2rem;">
-            
+
             <!-- Repository List -->
             <div class="card">
                 <div class="section-title">
@@ -511,7 +511,7 @@
 
         <!-- Right Column: Recent Activity Logs -->
         <div style="display: flex; flex-direction: column; gap: 2rem;">
-            
+
             <div class="card">
                 <div class="section-title">Recent Exact Cache</div>
                 <div class="recent-list" id="recent-exact-list">
@@ -545,7 +545,7 @@
             try {
                 const response = await fetch("/api/stats");
                 const data = await response.json();
-                
+
                 // 1. Fill overview cards
                 document.getElementById("stat-cost-saved").textContent = `$${data.summary.cost_saved.toFixed(4)}`;
                 document.getElementById("stat-cost-spent").textContent = `Cost spent: $${data.summary.cost_spent.toFixed(4)}`;
@@ -553,7 +553,7 @@
                 document.getElementById("stat-tokens-spent").textContent = `Tokens spent: ${data.summary.tokens_spent.toLocaleString()}`;
                 document.getElementById("stat-hit-rate").textContent = `${data.summary.hit_rate.toFixed(1)}%`;
                 document.getElementById("stat-hits-misses").textContent = `Hits: ${data.summary.hits} / Misses: ${data.summary.misses}`;
-                
+
                 // Count entries
                 let totalCaches = 0;
                 data.repos.forEach(r => {
@@ -564,7 +564,7 @@
                 // 2. Build Monitored Repos table
                 const tbody = document.getElementById("repo-table-body");
                 tbody.innerHTML = "";
-                
+
                 const selectRepo = document.getElementById("inv-repo");
                 selectRepo.innerHTML = "";
 
@@ -610,27 +610,27 @@
         function populateRecentList(elementId, items, type) {
             const list = document.getElementById(elementId);
             list.innerHTML = "";
-            
+
             if (!items || items.length === 0) {
                 list.innerHTML = `<div style="color: var(--text-muted); font-size: 0.875rem;">No active entries.</div>`;
                 return;
             }
-            
+
             items.forEach(item => {
                 const div = document.createElement("div");
                 div.className = "recent-item";
-                
+
                 // Date formatting
                 const date = new Date(item.created_at);
                 const timeStr = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
-                
+
                 let title = type === "exact" ? `Key: ${item.key.substring(0, 8)}...` : item.prompt;
-                
+
                 // Files markup
                 let filesMarkup = "";
                 if (item.files && item.files.length > 0) {
-                    filesMarkup = `<div class="recent-files">` + 
-                        item.files.map(f => `<span class="file-tag">${f}</span>`).join('') + 
+                    filesMarkup = `<div class="recent-files">` +
+                        item.files.map(f => `<span class="file-tag">${f}</span>`).join('') +
                         `</div>`;
                 }
 
@@ -667,12 +667,12 @@
             const repo = document.getElementById("inv-repo").value;
             const type = document.getElementById("inv-type").value;
             const file = document.getElementById("inv-file").value.strip ? document.getElementById("inv-file").value.trim() : document.getElementById("inv-file").value;
-            
+
             if (!repo) {
                 alert("Please select a repository first.");
                 return;
             }
-            
+
             let payload = { repo: repo };
             if (type === "file") {
                 if (!file) {
@@ -681,7 +681,7 @@
                 }
                 payload.file = file;
             }
-            
+
             try {
                 const resp = await fetch("/api/invalidate", {
                     method: "POST",
@@ -715,10 +715,10 @@
 
         function updateChart(repos) {
             const ctx = document.getElementById('savingsChart').getContext('2d');
-            
+
             const labels = repos.map(r => r.repo);
             const data = repos.map(r => r.cost_saved);
-            
+
             if (savingsChart) {
                 savingsChart.data.labels = labels;
                 savingsChart.data.datasets[0].data = data;

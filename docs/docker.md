@@ -29,7 +29,7 @@ pid: "host"
 ```
 
 ### Windows & macOS (Cross-Platform)
-Since shared PID namespaces are not supported on Windows/macOS virtual hypervisors, you must pass the working directory explicitly in HTTP headers using Claude Code's custom header configurations. 
+Since shared PID namespaces are not supported on Windows/macOS virtual hypervisors, you must pass the working directory explicitly in HTTP headers using Claude Code's custom header configurations.
 
 Add the following shortcut functions to your shell config file (`~/.bashrc`, `~/.zshrc`, or PowerShell profile):
 

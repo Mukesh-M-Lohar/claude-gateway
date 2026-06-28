@@ -1,6 +1,6 @@
 # Enterprise Scaling (100+ Developers)
 
-While the default setup runs as a local standalone daemon, Claude Gateway is designed to scale into a centralized enterprise proxy service serving large development teams (100+ developers). 
+While the default setup runs as a local standalone daemon, Claude Gateway is designed to scale into a centralized enterprise proxy service serving large development teams (100+ developers).
 
 This guide details the architecture and requirements for a scaled deployment.
 
@@ -31,7 +31,7 @@ Instead of developers running independent caches, the proxy can be deployed cent
 
 ## 2. API Context Handling at Scale
 
-Centralized gateways cannot use `psutil` local socket lookup to detect a developer's local CWD on their host machine. 
+Centralized gateways cannot use `psutil` local socket lookup to detect a developer's local CWD on their host machine.
 
 ### Workaround: Custom Header Injection
 To make the centralized proxy repository-aware, distribute a shell wrapper alias or Git hook that automatically captures Git context and passes it as HTTP request headers:
@@ -48,7 +48,7 @@ function claude-central() {
   # Configure CLI to point to central proxy and inject git variables
   export ANTHROPIC_BASE_URL="https://claude-gateway.corp.internal"
   export ANTHROPIC_CUSTOM_HEADERS="X-Git-Repo: $repo_name\nX-Git-Branch: $branch_name\nX-Git-Commit: $commit_hash\nX-Working-Dir: $working_dir"
-  
+
   claude "$@"
 }
 ```

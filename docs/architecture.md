@@ -1,6 +1,61 @@
 # Architecture Details
 
-Claude Gateway acts as a high-performance HTTP proxy between the **Claude Code** CLI client and the **Anthropic Messages API**. 
+Claude Gateway acts as a high-performance HTTP proxy between the **Claude Code** CLI client and the **Anthropic Messages API**.
+
+---
+
+## System Architecture
+
+The following block diagram illustrates the subsystems, databases, background workers, and external connections within the Claude Gateway:
+
+```mermaid
+graph TD
+    classDef main fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff;
+    classDef db fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff;
+    classDef external fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#fff;
+    classDef worker fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:#fff;
+
+    Client["Claude Code CLI (Client)"]:::main
+    Gateway["Claude Gateway (FastAPI Proxy)"]:::main
+
+    subgraph LocalCache ["Cache Layers"]
+        Exact["Exact Match Cache<br/>(Redis / SQLite)"]:::db
+        Semantic["Semantic Vector Cache<br/>(Qdrant / SQLite)"]:::db
+    end
+
+    subgraph GitContext ["Workspace & Git Context"]
+        GitWatcher["Git Repository Watcher<br/>(Polls branch / file changes)"]:::worker
+        Invalidation["Cache Invalidation Engine<br/>(SHA-256 File Hash Check)"]:::worker
+    end
+
+    subgraph Storage ["Persistent Storage"]
+        MetricsDB["SQLite Metrics DB<br/>(Stats, Costs, History)"]:::db
+    end
+
+    Anthropic["Anthropic Messages API"]:::external
+    LocalLLM["Local Embedding Provider<br/>(Ollama / LM Studio / Gemini / OpenAI)"]:::external
+
+    %% Data Flows
+    Client -->|1. POST /v1/messages| Gateway
+    Gateway -->|2. Check PID CWD / Git info| GitContext
+    Gateway -->|3. Compute normalized hash & check| Exact
+
+    Exact -->|Hit & Valid| Client
+    Exact -->|Miss / Stale| Semantic
+
+    Semantic -->|4. Get embeddings| LocalLLM
+    Semantic -->|Hit & Valid| Client
+
+    Semantic -->|Miss| Anthropic
+    Anthropic -->|5. Stream response chunks| Gateway
+    Gateway -->|6. Stream response & Cache| Client
+
+    %% Cache Updates & Invalidation
+    Gateway -.->|Update cache entries & file hashes| LocalCache
+    Gateway -.->|Write token & cost metrics| MetricsDB
+    GitWatcher -->|Invalidates stale keys| LocalCache
+    Invalidation -->|Verify file hashes on-read| LocalCache
+```
 
 ---
 
@@ -19,7 +74,7 @@ sequenceDiagram
 
     Developer->>Gateway: POST /v1/messages
     Note over Gateway: 1. Detect CWD/PID via psutil<br/>2. Extract & Normalize prompt<br/>3. Resolve referenced file hashes
-    
+
     Gateway->>DB: Check Exact Cache (SHA-256 Key)
     alt Exact Cache Hit & File Hashes Valid
         DB-->>Gateway: Return cached response text
@@ -55,7 +110,7 @@ sequenceDiagram
 
 ### 2. Cache Invalidation Control (`gateway/cache/invalidation.py`)
 - **Regex Normalization**: Strips polite phrases and compacts spacing so minor syntax variations hit the cache.
-- **Workspace Verification**: Scans prompt text for filenames, checks if they exist in the repository, and hashes them using SHA-256. 
+- **Workspace Verification**: Scans prompt text for filenames, checks if they exist in the repository, and hashes them using SHA-256.
 - **Lazy Check**: Validates that files are in their cached state on read before returning a hit. Stale caches are immediately evicted.
 - **Background Watcher**: Polls repository directories. If a branch changes or `git status` reveals a file modification, any cached prompt linked to that file is immediately deleted.
 
